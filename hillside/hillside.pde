@@ -21,7 +21,7 @@ void draw() {
   
   Date d = new Date();
   long current = d.getTime()/1000; 
-  save("image_" + current + ".png");
+  save("images/image_" + current + ".png");
 }
 
 // generate one color per element, plus one for the background
