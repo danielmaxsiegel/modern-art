@@ -19,6 +19,8 @@ void draw() {
     drawElement(placement, numberOfElements);
   }
   
+  generateNoise();
+  
   Date d = new Date();
   long current = d.getTime()/1000; 
   save("images/image_" + current + ".png");
@@ -110,4 +112,15 @@ color randomColour() {
 
 int randomInt(int lowerBound, int upperBound) {
   return int(random(lowerBound, upperBound + 1));
+}
+
+void generateNoise() {
+  for (int k=0; k<width; k++) {
+    for (int l=0; l<height; l++) {
+      fill(random(210,255), random(210,255), random(210,255), random(7,13));
+      float noiseWidth = random(0,2);
+      float noiseHeight = random(0,2);
+      rect(k, l, noiseWidth, noiseHeight);
+    }
+  }
 }

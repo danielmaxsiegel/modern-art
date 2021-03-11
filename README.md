@@ -6,7 +6,8 @@ A few quick n' dirty Processing scripts for generating modern art.
 
 ### Hillside
 
-![Hillside](samples/hillside.png)
+![Hillside](samples/hillside.png)      |   ![Hillside](samples/hillside2.png)
+:-------------------------:|:-------------------------:
 
 ## Installation
 
