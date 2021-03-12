@@ -3,11 +3,14 @@ import java.util.Date;
 
 ArrayList<Rectangle> rectangles;
 color white, black, red, yellow, blue;
-int[] columns, rows;
+IntList columns, rows;
+int strokeWeight;
 
 void setup() {
-  size(1000,800);
+  size(800,1000);
   background(255);
+  
+  strokeWeight = 10; 
   
   white = color(250, 250, 250);
   black = color(10, 15, 20);
@@ -16,123 +19,82 @@ void setup() {
   blue = color(50, 80, 195);
   
   columns = initializeGroup(randomInt(5,6), width);
-  rows = initializeGroup(columns.length - 1, height);
+  rows = initializeGroup(randomInt(4,5), height);
   
   rectangles = createRectangles();
  
   noLoop();
 }
 
-int[] initializeGroup(int length, int measurement) {
-  int[] group = new int[length];
-  int totalSize = 0, currentSize = 0;
+// Create the sizes of the rows & columns
+IntList initializeGroup(int groupSize, int measurement) {
+  IntList sizes = new IntList();
+  int minDeduction, maxDeduction, totalSize, nextElementSize, bigColumnIndex;
+  minDeduction = maxDeduction = totalSize = nextElementSize = bigColumnIndex = 0;
   
-  for (int i=0; i < length; i++) {
-    if (i == length - 1) {
-      currentSize = measurement - totalSize;
-    } else {
-      currentSize = measurement/length + randomInt(-20,20);
-    }
+  // generate length-1 rows/columns, and one big one
+  for (int i = 0; i < groupSize - 1; i++) {
+    minDeduction = 20; // at least one row/column will have to be big, so this can't be 0
+    maxDeduction = 60; // these two numbers might change pending experimentation
     
-    group[i] = currentSize;
-    totalSize += currentSize;
+    nextElementSize = int(
+      (measurement/groupSize) - randomInt(minDeduction, maxDeduction)
+    );
+    sizes.append(nextElementSize);
+    totalSize += nextElementSize;
   }
   
-  return group;
+  // add the big row/column
+  sizes.append(measurement - totalSize + strokeWeight);
+    
+  sizes.shuffle();
+  
+  // If this is true, we're working with the columns
+  if (measurement == width) {
+    for (int i = 0; i < groupSize; i++) {
+      if (sizes.get(i) > measurement / groupSize) {
+        bigColumnIndex = i;
+      }
+    }
+  }
+  
+  sizes.set(0, sizes.get(0) - 50);
+  sizes.set(groupSize, sizes.get(groupSize - 1) - 50);
+  sizes.set(bigColumnIndex, sizes.get(bigColumnIndex) + 100);
+  
+  return sizes;
 }
 
 void draw() {
   drawRectangles();
-  //generateNoise();
-  //saveImage();
+  generateNoise();
+  saveImage();
 }
 
 ArrayList<Rectangle> createRectangles() {
-  int columnWidth = 0, rowHeight = 0, index = 0, totalWidth = 0, totalHeight = 0;
+  int columnWidth = 0, rowHeight = 0, index = 0;
     
   ArrayList<Rectangle> rectangles = new ArrayList<Rectangle>();
   index = 0;
   
-  for (int i = 0; i < columns.length; i++) {
-    columnWidth = columns[i];
+  for (int i = 0; i < columns.size(); i++) {
+    columnWidth = columns.get(i);
     
-    for (int j = 0; j < rows.length; j++) {
-      rowHeight = rows[j];
+    for (int j = 0; j < rows.size(); j++) {
+      rowHeight = rows.get(j);
       
       rectangles.add(
         index,
         new Rectangle(
-          totalWidth,
-          totalHeight,
+          listSum(columns, i) - (strokeWeight/2),
+          listSum(rows, j) - (strokeWeight/2),
           columnWidth,
           rowHeight)
         );
       index = index+1;
     }
-    
-    totalWidth += columns[i];
   }
-  
-  //rectangles.add(0, new Rectangle(-50, -50, width+100, height+100));
-  //double size;
-  //size = randomSizeDouble();
-  //splitRectangleHor(rectangles, 0, size);
-  //size = randomSizeDouble();
-  //splitRectangleVer(rectangles, 0, size);
-  //splitRectangleVer(rectangles, 3, size);
-  
-  // split random rectangles into two
-  //for (int j = 1; j < rectangles.size(); j++) {
-  //  size = randomSizeDouble();
-  //  // 1/3 chance of splitting any given rectangle
-  //  if ((int) (Math.random() * 3 + 1) == 3) {
-  //    // 1/2 chance of splitting horizontally or vertically
-  //    if ((int) (Math.random() * 2 + 1) == 1) {
-  //      splitRectangleHor(rectangles, j, size);
-  //    } else {
-  //      splitRectangleVer(rectangles, j, size);
-  //    }
-  //  }
-  //}
-    
   return rectangles;
-}
-
-Rectangle splitHorBottom(Rectangle r, double size) {
-  // Splits a rectangle horizontally, returns bottom part
-  Rectangle r2 = new Rectangle(r.x, r.y, r.width, r.height);
-  r2.y = (int) Math.round(r2.y + (r2.height * (1 - size)));
-  r2.height = (int) Math.round(r2.height * size);
-  return r2;
-}
-
-Rectangle splitHorTop(Rectangle r, double size) {
-  // Splits a rectangle horizontally, returns top part
-  r.height = (int) Math.round(r.height * (1 - size));
-  return r;
-}
-
-Rectangle splitVerRight(Rectangle r, double size) {
-  Rectangle r2 = new Rectangle(r.x, r.y, r.width, r.height);
-  r2.x = (int) Math.round(r2.x + (r2.width * (1 - size)));
-  r2.width = (int) Math.round(r2.width * size);
-  return r2;
-}
-
-// Same as above except vertically
-Rectangle splitVerLeft(Rectangle r, double size) {
-  r.width = (int) Math.round(r.width * (1 - size));
-  return r;
-}
-
-void splitRectangleHor(ArrayList<Rectangle> rectangles, int index, double size) {
-  rectangles.add(splitHorBottom(rectangles.get(index), size));
-  rectangles.add(index, splitHorTop(rectangles.get(index), size));
-}
-
-void splitRectangleVer(ArrayList<Rectangle> rectangles, int index, double size) {
-  rectangles.add(splitVerRight(rectangles.get(index), size));
-  rectangles.add(index, splitVerLeft(rectangles.get(index), size));
 }
 
 void drawRectangles() {
@@ -140,9 +102,31 @@ void drawRectangles() {
   for (int i = 0; i < rectangles.size(); i++) {
     currentRect = rectangles.get(i);
     fill(getRandomColour());
-    strokeWeight(10);
-    
+    stroke(0);
+    strokeWeight(strokeWeight);
     rect(currentRect.x, currentRect.y, currentRect.width, currentRect.height);
+
+    // randomly subdivide rectangles in the big row
+    if (currentRect.height > height / rows.size()) {
+      if (currentRect.width > width / columns.size()) {
+        rect(
+          currentRect.x,
+          currentRect.y,
+          currentRect.width,
+          currentRect.height - randomInt(25, currentRect.height-25)
+        );
+      } else if(randomInt(0, columns.size()) > 0) {
+        //strokeWeight(0);
+        noStroke();
+        fill(getRandomColour());
+        rect(
+          currentRect.x + (strokeWeight / 2),
+          currentRect.y + randomInt(15, currentRect.height - 25),
+          currentRect.width,
+          currentRect.height - randomInt(25, currentRect.height-25)
+        );
+      }
+    }
   }
 }
 
@@ -170,9 +154,20 @@ color getRandomColour() {
   } else if (rand == 4) {
     return blue;
   } else {
-    return color(random(0,255), random(0,255), random(0,255));
-    //return white;
+    return white;
   }
+}
+
+int listSum(IntList arr, int maxIndex) {
+  if (maxIndex == 0) {
+    return 0;
+  }
+  
+  int sum = 0;
+  for (int i=0; i < maxIndex; i++) {
+    sum += arr.get(i);
+  }
+  return sum;
 }
 
 double randomSizeDouble() {
@@ -180,7 +175,7 @@ double randomSizeDouble() {
 }
 
 int randomInt(int bottom, int top) {
-  return int(random(bottom, top));
+  return int(random(bottom, top+1));
 }
 
 void saveImage() {

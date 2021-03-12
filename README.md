@@ -9,6 +9,11 @@ A few quick n' dirty Processing scripts for generating modern art.
 ![Hillside](samples/hillside.png)      |   ![Hillside](samples/hillside2.png)
 :-------------------------:|:-------------------------:
 
+### Mondrian
+
+![Mondrian](samples/mondrian1.png)      |   ![Mondrian](samples/mondrian2.png)
+:-------------------------:|:-------------------------:
+
 ## Installation
 
 The only prerequisite to run any of these should be [Processing](https://processing.org/) - simply run any of the .pdes to generate images.
