@@ -41,3 +41,23 @@ Also, please support [the Processing Foundation](https://processingfoundation.or
 
 ## License
 [Unlicense](https://unlicense.org/).
+
+## Future Plans
+
+https://www.moma.org/collection/works/94278?=undefined&direction=fwd&on_view=1&page=2&with_images=1
+
+https://www.moma.org/collection/works/116287?=undefined&direction=fwd&on_view=1&page=3&with_images=1
+
+https://www.moma.org/collection/works/147118?=undefined&direction=fwd&on_view=1&page=7&with_images=1
+
+https://www.moma.org/collection/works/191856?=undefined&direction=fwd&on_view=1&page=8&with_images=1
+
+https://www.moma.org/collection/works/59631?=undefined&direction=fwd&on_view=1&page=10&with_images=1
+
+https://www.moma.org/collection/works/108290?=undefined&direction=fwd&on_view=1&page=12&with_images=1
+
+https://www.moma.org/collection/works/80103?=undefined&direction=fwd&on_view=1&page=13&with_images=1
+
+https://www.moma.org/collection/works/205988?=undefined&direction=fwd&on_view=1&page=19&with_images=1
+
+https://www.moma.org/collection/works/96439?=undefined&direction=fwd&on_view=1&page=20&with_images=1
